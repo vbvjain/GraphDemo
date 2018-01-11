@@ -42,4 +42,9 @@ public class AdjacencyMatrixGraph implements Graph {
         Collections.sort(adjacentVertexList);
         return adjacentVertexList;
     }
+
+    @Override
+    public void depthFirst(int startingVertex) {
+
+    }
 }

@@ -13,4 +13,5 @@ public interface Graph {
         UN,DI};
     void makeEdge(int v1,int v2);
     List<Integer> getAdjacentVertices(int v);
+    void depthFirst(int startingVertex);
 }

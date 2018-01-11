@@ -3,23 +3,31 @@ package com.vbvjain;
 import sun.security.provider.certpath.AdjacencyList;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Stack;
 
-/**
- * Created by vaibhavjain on 11/01/18.
- */
+
 public class AdjacencyListGraph implements Graph {
     Node[] adjacencyList;
     int numOfVerticex = 0;
     typeOfGraph typeOfGraph = Graph.typeOfGraph.DI;
+    Boolean[] visited;
+    Stack<Integer> stack;
 
     public AdjacencyListGraph(int numOfVerticex, Graph.typeOfGraph typeOfGraph) {
         this.numOfVerticex = numOfVerticex;
         this.typeOfGraph = typeOfGraph;
         adjacencyList = new Node[numOfVerticex];
+        visited = new Boolean[numOfVerticex];
         for (int i = 0; i < numOfVerticex; i++) {
             adjacencyList[i] = null;
         }
+        for (int i = 0; i < numOfVerticex; i++) {
+            visited[i] = false;
+        }
+        stack = new Stack<>();
+
     }
 
     @Override
@@ -57,6 +65,47 @@ public class AdjacencyListGraph implements Graph {
             t = t.next;
         }
         return arrayList;
+    }
+
+    @Override
+    public void depthFirst(int startingVertex) {
+        stack.push(startingVertex);
+        printTheNode(startingVertex);
+        markVisited(startingVertex);
+        traverse();
+        }
+
+    private void traverse() {
+        Integer peek = stack.peek();
+        int unvisitedNode = getUnvisitedNode(peek);
+        if (unvisitedNode == -1) {
+            stack.pop();
+            if (stack.empty()) return;
+            traverse();
+        } else {
+            stack.push(unvisitedNode);
+            printTheNode(unvisitedNode);
+            markVisited(unvisitedNode);
+            traverse();
+        }
+    }
+
+    private void markVisited(int unvisitedNode) {
+        visited[unvisitedNode] = true;
+    }
+
+    private void printTheNode(int startingVertex) {
+        System.out.println("The Node is " + startingVertex);
+    }
+
+    private int getUnvisitedNode(int startingVertex) {
+        List<Integer> adjacentVertices = getAdjacentVertices(startingVertex);
+        Iterator<Integer> iterator = adjacentVertices.iterator();
+        while (iterator.hasNext()){
+            Integer next = iterator.next();
+            if (!visited[next]) return next;
+        }
+        return -1;
     }
 
     private Node getNode(int v2) {
